@@ -1,4 +1,3 @@
-import sun.jvm.hotspot.debugger.posix.elf.ELFSectionHeader;
 
 public class Gleitpunktzahl {
 
