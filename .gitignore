@@ -1,2 +1,7 @@
 # Project exclude paths
 /out/
+/FastMath.class
+/Gleitpunktzahl.class
+/Plotter.class
+/Test_FastInverse.class
+/Test_Gleitpunktzahl.class
