@@ -337,7 +337,7 @@ public class Gleitpunktzahl {
 		} else if (this.vorzeichen) {
 			this.vorzeichen = !this.vorzeichen;
 			return r.sub(this);
-		}
+		} //
 
 		// TODO: Randfälle wenn this oder r negativ sind
 		Gleitpunktzahl result = new Gleitpunktzahl();
