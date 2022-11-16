@@ -353,9 +353,11 @@ public class Gleitpunktzahl {
 		}
 
 		denormalisiere(this, r);
+
 		if (r.vorzeichen == this.vorzeichen) {
 			result.mantisse = this.mantisse + r.mantisse;
 			result.exponent = this.exponent;
+			result.vorzeichen = this.vorzeichen;
 		} else if (this.vorzeichen) {
 			if(this.compareAbsTo(r) >= 1) {
 				result.mantisse = this.mantisse - r.mantisse;
@@ -374,14 +376,28 @@ public class Gleitpunktzahl {
 	 * gespeichert, normiert, und dieses wird zurueckgegeben.
 	 */
 	public Gleitpunktzahl sub(Gleitpunktzahl r) {
+		Gleitpunktzahl result = new Gleitpunktzahl();
+
 		if (this.isNull()) {
 			r.vorzeichen = !r.vorzeichen;
 			return r;
 		} else if (r.isNull()) {
 			return this;
+		} else if(r.isInfinite() && this.isInfinite()) {
+			if(r.vorzeichen == this.vorzeichen) {
+				return new Gleitpunktzahl(this);
+			}
+			result.mantisse = 1;
+			result.exponent = maxExponent;
+			return result;
+		} else if (this.isNull() || r.isInfinite()) {
+			result = new Gleitpunktzahl(r);
+			result.vorzeichen = !r.vorzeichen;
+			return result;
+		} else if (r.isNull() || this.isInfinite()) {
+			return new Gleitpunktzahl(this);
 		}
 
-		Gleitpunktzahl result = new Gleitpunktzahl();
 
 		denormalisiere(this, r);
 
