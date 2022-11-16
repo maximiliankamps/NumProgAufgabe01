@@ -51,14 +51,10 @@ public class FastMath {
             return result;
         }
 
-        double threehalfs = 1.5;
-        double x2 = x.toDouble()/2;
-
         int i = gleitpunktzahlToIEEE(x);
         i = MAGIC_NUMBER - (i >> 1);
         double y = iEEEToGleitpunktzahl(i).toDouble();
 
-        y = y * (threehalfs - (x2 * y * y));
         return new Gleitpunktzahl(y);
     }
 

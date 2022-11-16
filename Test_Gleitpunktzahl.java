@@ -11,12 +11,8 @@ public class Test_Gleitpunktzahl {
         Gleitpunktzahl.setSizeMantisse(8);
         Gleitpunktzahl.setSizeExponent(4);
 
-        Gleitpunktzahl x = new Gleitpunktzahl();
-        x.mantisse = 0;
-        x.exponent = Gleitpunktzahl.getMaxExponent();
-        x.normalisiere();
-
-        System.out.println(x.toDouble());
+        Gleitpunktzahl x = new Gleitpunktzahl(11.1);
+        System.out.println(FastMath.invSqrt(x).toDouble());
     }
 
     public static void test_Gleitpunktzahl() {
