@@ -289,18 +289,26 @@ public class Gleitpunktzahl {
 	public void normalisiere() {
 		int round = 0;
 		int i = (int) (Math.log(Integer.highestOneBit(mantisse)) / Math.log(2)); // get position of MSFB
-		int shiftNum = (sizeMantisse) - (i - 1); // determine by how much the mantissa must be shifted
-		if ((mantisse & 1) != 0) { // set round to 1, if the LSFB is 1
-			round = 1;
-		}
-		mantisse = mantisse >> shiftNum; // shift mantissa
-		mantisse += round;
-		exponent = exponent + shiftNum; // number of shifts must be added to exponent
+		int shiftNum = Math.abs(sizeMantisse - 1 - i); // determine by how much the mantissa must be shifted
+		if((i + 1) < sizeMantisse) {
+			mantisse = mantisse << shiftNum; // shift mantissa
 
-		if (Math.abs(toDouble()) >= Math.abs(Math.pow(2, maxExponent) * (Math.pow(2, sizeMantisse) - 1))) { // Number is Inf
-			exponent = maxExponent;
-			mantisse = 0;
+			if(exponent < shiftNum) { //Number is to small to be represented
+				exponent = 0;
+				mantisse = 0;
+				vorzeichen = false;
+			} else {
+				exponent = exponent - shiftNum;
+			}
+		} else if((i + 1) > sizeMantisse) {
+			if ((mantisse & 1) != 0) {  // 7 Mantissa bits | 1
+				round = 1;
+			}
+			mantisse = mantisse >> shiftNum; // shift mantissa
+			exponent = exponent + shiftNum;
 		}
+		mantisse += round;
+		mantisse = mantisse & ((int) Math.pow(2, sizeMantisse) - 1);
 	}
 
 	/**

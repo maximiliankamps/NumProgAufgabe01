@@ -13,11 +13,12 @@ public class Test_Gleitpunktzahl {
 
 
         Gleitpunktzahl z = new Gleitpunktzahl();
+        z.mantisse = Integer.parseInt("111000", 2);
         z.exponent = 0;
-        z.mantisse = 56;
         z.vorzeichen = true;
         z.normalisiere();
-        z.toDouble();
+        System.out.println(z);
+        System.out.println(z.toDouble());
 
         Gleitpunktzahl x = new Gleitpunktzahl(7.0);
         System.out.println(x.toDouble());
