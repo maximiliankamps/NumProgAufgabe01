@@ -9,11 +9,19 @@ public class Test_Gleitpunktzahl {
     public static void main(String[] argv) {
         //test_Gleitpunktzahl();
         Gleitpunktzahl.setSizeMantisse(8);
-        Gleitpunktzahl.setSizeExponent(8);
+        Gleitpunktzahl.setSizeExponent(4);
 
-        Gleitpunktzahl x = new Gleitpunktzahl(13);
-        Gleitpunktzahl y = new Gleitpunktzahl(11.5);
-        System.out.println(x.add(y).toDouble());
+
+        Gleitpunktzahl z = new Gleitpunktzahl();
+        z.exponent = 0;
+        z.mantisse = 56;
+        z.vorzeichen = true;
+        z.normalisiere();
+        z.toDouble();
+
+        Gleitpunktzahl x = new Gleitpunktzahl(7.0);
+        System.out.println(x.toDouble());
+        System.out.println(FastMath.invSqrt(x).toDouble());
     }
 
     public static void test_Gleitpunktzahl() {

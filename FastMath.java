@@ -44,9 +44,22 @@ public class FastMath {
      * @return Approximation for 1 / sqrt(x).
      */
     public static Gleitpunktzahl invSqrt(Gleitpunktzahl x) {
+        if(x.isInfinite() || x.isNull() || x.isNaN() || x.vorzeichen) {
+            Gleitpunktzahl result = new Gleitpunktzahl();
+            result.mantisse = 1;
+            result.exponent = Gleitpunktzahl.getMaxExponent();
+            return result;
+        }
 
-        /* TODO: hier den "fast inverse square root" Algorithmus implementieren */
-        return null;
+        double threehalfs = 1.5;
+        double x2 = x.toDouble()/2;
+
+        int i = gleitpunktzahlToIEEE(x);
+        i = MAGIC_NUMBER - (i >> 1);
+        double y = iEEEToGleitpunktzahl(i).toDouble();
+
+        y = y * (threehalfs - (x2 * y * y));
+        return new Gleitpunktzahl(y);
     }
 
     /**

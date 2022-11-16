@@ -42,6 +42,10 @@ public class Gleitpunktzahl {
 	private static int maxExponent = (int) Math.pow(2, sizeExponent) - 1;
 	private static int expOffset = (int) Math.pow(2, sizeExponent - 1) - 1;
 
+	public static int getMaxExponent() {
+		return maxExponent;
+	}
+
 	/**
 	 * Falls die Anzahl der Bits der Mantisse noch nicht gesperrt ist, so wird sie
 	 * auf abm gesetzt und gesperrt
@@ -293,7 +297,7 @@ public class Gleitpunktzahl {
 		mantisse += round;
 		exponent = exponent + shiftNum; // number of shifts must be added to exponent
 
-		if (toDouble() >= Math.pow(2, maxExponent) * (Math.pow(2, sizeMantisse) - 1)) { // Number is Inf
+		if (Math.abs(toDouble()) >= Math.abs(Math.pow(2, maxExponent) * (Math.pow(2, sizeMantisse) - 1))) { // Number is Inf
 			exponent = maxExponent;
 			mantisse = 0;
 		}
@@ -325,27 +329,33 @@ public class Gleitpunktzahl {
 	public Gleitpunktzahl add(Gleitpunktzahl r) {
 		// TODO: Randfall Inf + Inf und Inf + (-Inf) und ... herausfinden und behandeln
 		// Absorption für die unendlichkeit.
-		if (this.isNull() || r.isInfinite()) {
+		Gleitpunktzahl result = new Gleitpunktzahl();
+
+		if(r.isInfinite() && this.isInfinite()) {
+			if(r.vorzeichen == this.vorzeichen) {
+				return new Gleitpunktzahl(this);
+			}
+			result.mantisse = 1;
+			result.exponent = maxExponent;
+			return result;
+		} else if (this.isNull() || r.isInfinite()) {
 			return new Gleitpunktzahl(r);
 		} else if (r.isNull() || this.isInfinite()) {
 			return new Gleitpunktzahl(this);
 		}
-//
-		if (r.vorzeichen) {
-			r.vorzeichen = !r.vorzeichen;
-			return this.sub(r);
-		} else if (this.vorzeichen) {
-			this.vorzeichen = !this.vorzeichen;
-			return r.sub(this);
-		} //
 
-		// TODO: Randfälle wenn this oder r negativ sind
-		Gleitpunktzahl result = new Gleitpunktzahl();
 		denormalisiere(this, r);
-		result.mantisse = this.mantisse + r.mantisse;
-		result.exponent = this.exponent;
+		if (r.vorzeichen == this.vorzeichen) {
+			result.mantisse = this.mantisse + r.mantisse;
+			result.exponent = this.exponent;
+		} else if (this.vorzeichen) {
+			if(this.compareAbsTo(r) >= 1) {
+				result.mantisse = this.mantisse - r.mantisse;
+				result.exponent = this.exponent;
+				result.vorzeichen = true;
+			}
+		}
 		result.normalisiere();
-
 		return result;
 	}
 
